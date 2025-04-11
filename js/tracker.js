@@ -1,5 +1,18 @@
 import { StorageManager } from './storage.js';
 
+
+export function formatTime(ms) {
+    const seconds = Math.floor(ms / 1000);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    const padZero = (num) => num.toString().padStart(2, '0');
+
+    return `${padZero(hours)}:${padZero(minutes)}:${padZero(remainingSeconds)}`;
+}
+export { formatTime };
+
 export class TimeTracker {
     constructor() {
         this.activeTimers = new Map();
@@ -35,17 +48,17 @@ export class TimeTracker {
         const timeLimit = await StorageManager.getTimeLimit(domain);
         // Convert minutes to milliseconds only when timeLimit exists
         const timeLimitMs = timeLimit ? timeLimit * 60 * 1000 : null;
-        
+
         console.log('Starting timer for domain:', domain);
         console.log('Time limit (minutes):', timeLimit);
         console.log('Time limit (ms):', timeLimitMs);
-        
+
         const timer = {
             startTime: Date.now(),
             timeLimit: timeLimitMs,
             notifiedOvertime: false
         };
-        
+
         this.activeTimers.set(domain, timer);
         
         if (timeLimitMs) {
@@ -63,12 +76,14 @@ export class TimeTracker {
         }
     }
 
-    startTimeLimitCheck(domain) {
+    startTimeLimitCheck(domain) {      
         const timer = this.activeTimers.get(domain);
         if (!timer) return;
+        console.log(`Starting time limit check for ${domain}`);
 
         const checkInterval = setInterval(() => {
             const currentTimer = this.activeTimers.get(domain);
+            
             if (!currentTimer) {
                 clearInterval(checkInterval);
                 return;
@@ -80,6 +95,7 @@ export class TimeTracker {
                 currentTimer.notifiedOvertime = true;
             }
         }, 1000);
+        console.log(`Cleared time limit check for ${domain}`);
     }
 
     notifyTimeLimitExceeded(domain) {
@@ -89,6 +105,7 @@ export class TimeTracker {
             title: 'Time Limit Exceeded',
             message: `You've exceeded your time limit for ${domain}`
         });
+        console.log(`notifyTimeLimitExceeded created for ${domain}`)
     }
 
     async processVisit(domain, startTime, endTime) {
@@ -96,29 +113,17 @@ export class TimeTracker {
         const category = this.getCategory(domain);
         const duration = endTime - startTime;
         
+
         const visitData = {
             domain,
             category,
             startTime,
             endTime,
             duration,
-            formattedDuration: this.formatTime(duration),
-            date: new Date(startTime).toISOString().split('T')[0]
-        };
+            formattedDuration: formatTime(duration),
+            date: new Date(startTime).toISOString().split('T')[0]}
 
-        await StorageManager.saveTimeEntry(visitData);
-        return visitData;
-    }
-
-    formatTime(ms) {
-        const seconds = Math.floor(ms / 1000);
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = seconds % 60;
-        
-        const padZero = (num) => num.toString().padStart(2, '0');
-        
-        return `${padZero(hours)}:${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        await StorageManager.saveTimeEntry(visitData);return visitData;
     }
 
     calculateProductivityScore(timeData) {

@@ -5,37 +5,37 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Time Tracking Dashboard</h1>
-            <p>Your browsing insights for today</p>
+    <div class="dashboard">
+        <div class="dashboard__header">
+            <h1 class="dashboard__title">Time Tracking Dashboard</h1>
+            <p class="dashboard__subtitle">Your browsing insights for today</p>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h2>Productivity Score</h2>
-                <div class="productivity-score" id="productivityScore">--</div>
+        <div class="dashboard__stats-grid">
+            <div class="stat-card dashboard__stat-card">
+                <h2 class="stat-card__title">Productivity Score</h2>
+                <div class="stat-card__value" id="productivityScore">--</div>
             </div>
             
-            <div class="stat-card">
-                <h2>Total Time Today</h2>
-                <div class="time-stats" id="totalTime">--h --m</div>
+            <div class="stat-card dashboard__stat-card">
+                <h2 class="stat-card__title">Total Time Today</h2>
+                <div class="stat-card__value" id="totalTime">--h --m</div>
             </div>
 
-            <div class="stat-card">
-                <h2>Most Visited</h2>
-                <div id="topSites"></div>
+            <div class="stat-card dashboard__stat-card">
+                <h2 class="stat-card__title">Most Visited</h2>
+                <div class="stat-card__value" id="topSites"></div>
             </div>
         </div>
 
-        <div class="chart-container">
-            <h2>Time by Category</h2>
+        <div class="dashboard__chart-container">
+            <h2 class="dashboard__chart-title">Time by Category</h2>
             <!-- Canvas for the category chart -->
-            <canvas id="categoryChart" width="400" height="200"></canvas>
+            <canvas class="dashboard__chart" id="categoryChart" width="400" height="200"></canvas>
         </div>
 
-        <div class="chart-container">
-            <h2>Daily Activity</h2>
+        <div class="dashboard__chart-container">
+            <h2 class="dashboard__chart-title">Daily Activity</h2>
             <!-- Canvas for the daily activity chart -->
             <canvas id="dailyActivityChart" width="400" height="200"></canvas>
         </div>

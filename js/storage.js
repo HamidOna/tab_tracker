@@ -136,7 +136,10 @@ export class StorageManager {
         // Add new duration to existing values
         daily.totalTime += visitData.duration;
         daily.categories[visitData.category] = (daily.categories[visitData.category] || 0) + visitData.duration;
-        daily.domains[visitData.domain] = visitData.newTotal;  // Use accumulated time
+        const previousDuration = daily.domains[visitData.domain] || 0;
+        daily.domains[visitData.domain] = previousDuration + visitData.duration;
+
+
     
         await chrome.storage.local.set({ dailyData });
         return dailyData;

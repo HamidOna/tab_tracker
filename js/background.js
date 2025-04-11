@@ -100,6 +100,10 @@ function setupEventListeners() {
                 sendResponse();
             });
             return true;
+        }else if(request.action === "reloadDashboard"){
+            console.log("Reloading dashboard");
+            chrome.runtime.sendMessage({ action: "reloadDashboard" });
+            return true;
         }
         return true;
     });

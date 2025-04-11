@@ -3,80 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Tab Time Tracker - Popup</title>
-    <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <div class="popup-container">
-        <div class="header">
-            <h1>Tab Time Tracker</h1>
-            <!-- Extension Toggle Button -->
-            <button id="extensionToggle" class="toggle-button">Turn Off</button>
-        </div>
-
-        <!-- Real-Time Timer -->
-        <div class="real-time-timer" id="realTimeTimer">--h --m --s</div>
-
-        <div class="stat-section">
-            <h2>Current Domain:</h2>
-            <p id="currentDomain">--</p>
-        </div>
-
-        <div class="stat-section">
-            <h2>Time Spent on This Site Today:</h2>
-            <p id="timeSpent">--h --m --s</p>
-        </div>
-
-        <div class="stat-section">
-            <h2>Total Time Spent Today:</h2>
-            <p id="totalTime">--h --m --s</p>
-        </div>
-
-        <div class="stat-section">
-            <h2>Current Category:</h2>
-            <select id="categoryDropdown"></select>
-        </div>
-
-        <div class="stat-section">
-            <h2>Productivity Score:</h2>
-            <p id="productivityScore">--%</p>
-        </div>
-
-        <div class="stat-section">
-            <h2>Time Limit Status:</h2>
-            <p id="timeLimitStatus">--</p>
-            <p>Time Remaining: <span id="timeRemaining">--h --m --s</span></p>
-        </div>
-
-        <div class="button-section">
-            <button id="setTimeLimit">Set Time Limit</button>
-            <button id="addCategory">Add Category</button>
-            <button id="manageCategories">Manage Categories</button>
-            <button id="resetStats">Reset Today's Stats</button>
-            <button id="showStats">Open Dashboard</button>
-        </div>
-
-        <!-- Quick Category Buttons -->
-        <div class="quick-category-section" id="quickCategoryButtons"></div>
-
-        <!-- Error Message -->
-        <div id="error" class="error-message" style="display: none;"></div>
-
-
-        <!-- Modals -->
-        <!-- Time Limit Modal -->
-        <div id="timeLimitModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="cancelTimeLimitBtn">&times;</span>
-                <h2>Set Time Limit (minutes)</h2>
-                <input type="number" id="timeLimitInput" min="1" placeholder="Enter time limit in minutes">
-                <button id="saveTimeLimitBtn">Save</button>
+            <!-- Header -->
+            <div class="dashboard__header">
+                <div class="toggle-container">
+                    <button id="extensionToggle" class="toggle-button">Turn Off</button>
+                </div>
+                <h1 class="dashboard__title">Time Tracking Dashboard</h1>
+                <p id="currentDomain"></p>
             </div>
+        <div class="popup-content dashboard">
+                <div class="dashboard__stats-grid">
+                </div>
+                <div class="dashboard__chart-container">
+                    <h2>Current Category</h2>
+                    <select id="categoryDropdown"></select>
+                </div>
+                <div class="dashboard__chart-container">
+                    <h2>Time Limit Status</h2>
+                    <p id="timeLimitStatus">--</p>
+                    <p>Time Remaining: <span id="timeRemaining">--</span></p>
+                </div>
+
+            <div class="button-section">
+                <button id="addCategory">Add Category</button>
+                <button id="manageCategories">Manage Categories</button>
+                <button id="resetStats">Reset Today's Stats</button>
+            </div>
+
+
+            <div class="dashboard__chart-container">
+                <h2 class="dashboard__chart-title">Time by Category</h2>
+                <!-- Canvas for the category chart -->
+                <canvas class="dashboard__chart" id="categoryChart" width="400" height="200"></canvas>
+            </div>
+    
+            <div class="dashboard__chart-container">
+                <h2 class="dashboard__chart-title">Daily Activity</h2>
+                <!-- Canvas for the daily activity chart -->
+                <canvas id="dailyActivityChart" width="400" height="200"></canvas>
+            </div>
+
         </div>
 
+           <!-- Modals -->
         <!-- Add Category Modal -->
         <div id="categoryModal" class="modal">
             <div class="modal-content">
-                <span class="close" id="cancelCategoryBtn">&times;</span>
+                <span class="close close-category-modal" id="cancelCategoryBtn">&times;</span>
                 <h2>Add New Category</h2>
                 <input type="text" id="newCategoryInput" placeholder="Category name">
                 <button id="saveCategoryBtn">Add Category</button>
@@ -86,13 +63,24 @@
         <!-- Manage Categories Modal -->
         <div id="manageCategoriesModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="hideModals()">&times;</span>
+                <span class="close close-manage-category-modal">&times;</span>
                 <h2>Manage Categories</h2>
                 <div id="categoryList"></div>
             </div>
         </div>
-    </div>
+                <!-- Time Limit Modal -->
+                <div id="timeLimitModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close close-time-limit" id="cancelTimeLimitBtn">&times;</span>
+                        <h2>Set Time Limit (minutes)</h2>
+                        <input type="number" id="timeLimitInput" min="1" placeholder="Enter time limit in minutes">
+                        <button id="saveTimeLimitBtn">Save</button>
+                    </div>
+                </div>
 
+        <script src="js/libs/chart.js"></script>
+        <script type="module" src="js/dashboard.js"></script>
+    </div>
     <!-- Include your popup JavaScript -->
     <script type="module" src="js/popup.js"></script>
 </body>

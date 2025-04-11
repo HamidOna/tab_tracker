@@ -1,3 +1,5 @@
+import { TimeTracker } from './tracker.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadDashboard();
 });
@@ -5,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadDashboard() {
     try {
         const data = await chrome.storage.local.get(['dailyData']);
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().slice(0, 10);
         const todayData = data.dailyData?.[today] || { categories: {}, domains: {}, totalTime: 0 };
 
         updateProductivityScore(todayData.categories);
@@ -50,7 +52,7 @@ function calculateProductivityScore(categories) {
 function updateTotalTime(totalMs) {
     const totalTimeElement = document.getElementById('totalTime');
     if (totalTimeElement) {
-        totalTimeElement.textContent = formatTime(totalMs);
+        totalTimeElement.textContent = TimeTracker.formatTime(totalMs);
     }
 }
 
@@ -64,7 +66,7 @@ function updateTopSites(domains) {
         topSitesElement.innerHTML = sortedDomains
             .map(([domain, time]) => `
                 <div class="category-item">
-                    <span>${domain}</span>
+                    <span>${domain}</span> 
                     <span>${formatTime(time)}</span>
                 </div>
             `).join('');
@@ -88,24 +90,13 @@ function updateCategoryBreakdown(categories) {
                                 <div class="progress-fill" style="width: ${percentage}%"></div>
                             </div>
                         </div>
-                        <span>${formatTime(time)}</span>
+                        <span>${TimeTracker.formatTime(time)}</span>
                     </li>
                 `;
             }).join('');
 
-        categoryList.innerHTML = categoriesHTML;
+        categoryList.innerHTML = categoriesHTML;    
     }
-}
-
-function formatTime(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    return `${padZero(hours)}h ${padZero(minutes)}m`;
-}
-
-function padZero(num) {
-    return num.toString().padStart(2, '0');
 }
 
 function getScoreColor(score) {
@@ -155,14 +146,14 @@ async function updateDailyActivityChart(dailyData) {
                         beginAtZero: true,
                         ticks: {
                             callback: function (value) {
-                                return formatTime(value);
+                                return TimeTracker.formatTime(value);
                             }
                         }
                     }
                 },
                 plugins: {
                     tooltip: {
-                        callbacks: {
+                        callbacks: { 
                             label: function (context) {
                                 return formatTime(context.parsed.y);
                             }
@@ -202,7 +193,7 @@ function updateCategoryChart(categories) {
                             label: function (context) {
                                 const label = context.label || '';
                                 const value = context.parsed || 0;
-                                return `${label}: ${formatTime(value)}`;
+                                return `${label}: ${TimeTracker.formatTime(value)}`;
                             }
                         }
                     }
