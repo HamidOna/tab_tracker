@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extension Icon Converter</title>
+    <style>
+        .preview {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+        }
+        canvas {
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <div id="previews"></div>
+
+    <script>
+        const sizes = [16, 48, 128];
+        const previews = document.getElementById('previews');
+        
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    previews.innerHTML = ''; // Clear previous previews
+                    
+                    sizes.forEach(size => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Use better quality interpolation
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = 'high';
+                        
+                        // Draw image maintaining aspect ratio
+                        const scale = Math.min(size / img.width, size / img.height);
+                        const x = (size - img.width * scale) / 2;
+                        const y = (size - img.height * scale) / 2;
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                        
+                        // Create preview container
+                        const container = document.createElement('div');
+                        container.className = 'preview';
+                        
+                        // Add canvas
+                        container.appendChild(canvas);
+                        
+                        // Add download button
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.textContent = `Download ${size}x${size}`;
+                        downloadBtn.onclick = () => {
+                            const link = document.createElement('a');
+                            link.download = `icon${size}.png`;
+                            link.href = canvas.toDataURL('image/png');
+                            link.click();
+                        };
+                        container.appendChild(downloadBtn);
+                        
+                        // Add preview info
+                        const info = document.createElement('p');
+                        info.textContent = `${size}x${size}px`;
+                        container.appendChild(info);
+                        
+                        previews.appendChild(container);
+                    });
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

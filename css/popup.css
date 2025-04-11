@@ -1,0 +1,263 @@
+/* Base styles */
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 350px; /* Adjusted to match the popup width in your images but slightly wider */
+    margin: 0;
+    padding: 15px;
+    background: #f5f6fa;
+    color: #2c3e50;
+}
+
+
+/* Adjust responsive styles */
+@media (max-width: 500px) {
+    body {
+        width: 400px; /* Adjust for smaller screens */
+    }
+}
+
+
+/* Header styles */
+.popup-container h1 {
+    font-size: 18px;
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Stat section */
+.stat-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.stat-section h2 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+}
+
+.stat-section p {
+    margin: 0;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+/* Productivity score */
+#productivityScore {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Time Limit Status */
+#timeLimitStatus {
+    font-weight: bold;
+}
+
+#timeRemaining {
+    font-weight: bold;
+}
+
+/* Button section */
+.button-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.button-section button {
+    flex: 1 1 calc(50% - 10px);
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.button-section button:hover {
+    background: #2980b9;
+}
+
+.button-section button.full-width {
+    flex: 1 1 100%;
+}
+
+/* Quick Category Buttons */
+.quick-category-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.category-tag {
+    background: #e1e8f0;
+    color: #2c3e50;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.category-tag:hover {
+    background: #d1d8e0;
+}
+
+.category-tag.active {
+    background: #3498db;
+    color: white;
+}
+
+/* Dropdown styles */
+select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+/* Error message */
+.error-message {
+    color: #e74c3c;
+    background: #fee;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: none;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 300px;
+    margin: 20% auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.modal-content button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.modal-content button:hover {
+    background: #2980b9;
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+    body {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .button-section {
+        flex-direction: column;
+    }
+
+    .button-section button {
+        flex: 1 1 100%;
+    }
+}
+
+/* Real-Time Timer Styles */
+.real-time-timer {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+}
+
+/* Extension Toggle Button */
+.toggle-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.toggle-button:hover {
+    background: #c0392b;
+}
+
+.toggle-button.active {
+    background: #2ecc71;
+}
+
+.toggle-button.active:hover {
+    background: #27ae60;
+}
+
+/* Adjust the header to position relative */
+.header {
+    position: relative;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tab Time Tracker - Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Time Tracking Dashboard</h1>
+            <p>Your browsing insights for today</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2>Productivity Score</h2>
+                <div class="productivity-score" id="productivityScore">--</div>
+            </div>
+            
+            <div class="stat-card">
+                <h2>Total Time Today</h2>
+                <div class="time-stats" id="totalTime">--h --m</div>
+            </div>
+
+            <div class="stat-card">
+                <h2>Most Visited</h2>
+                <div id="topSites"></div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Time by Category</h2>
+            <!-- Canvas for the category chart -->
+            <canvas id="categoryChart" width="400" height="200"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2>Daily Activity</h2>
+            <!-- Canvas for the daily activity chart -->
+            <canvas id="dailyActivityChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Include the local Chart.js library -->
+    <script src="js/libs/chart.js"></script>
+    <!-- Include your dashboard JavaScript -->
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
