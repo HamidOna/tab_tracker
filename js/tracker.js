@@ -17,14 +17,14 @@ export class TimeTracker {
     constructor() {
         this.activeTimers = new Map();
         this.categories = {
-            'social': ['facebook.com', 'twitter.com', 'instagram.com'],
-            'work': ['github.com', 'gitlab.com', 'docs.google.com'],
-            'entertainment': ['youtube.com', 'netflix.com', 'spotify.com']
+            "social": ["facebook.com", "twitter.com", "instagram.com"],
+            "work": ["github.com", "gitlab.com", "docs.google.com"],
+            "entertainment": ["youtube.com", "netflix.com", "spotify.com"],
         };
         this.initialized = this.initialize();
     }
 
-    async initialize() {
+    async initialize(){
         await StorageManager.initializeDefaultCategories();
         await this.loadCategories();
     }
@@ -35,7 +35,7 @@ export class TimeTracker {
     }
 
     getCategory(domain) {
-        for (let [category, domains] of Object.entries(this.categories)) {
+        for(let [category, domains] of Object.entries(this.categories)){
             if (domains.some(d => domain.includes(d))) {
                 return category;
             }
@@ -44,7 +44,7 @@ export class TimeTracker {
     }
 
 
-    async startTimer(domain) {
+    async startTimer(domain){
         const timeLimit = await StorageManager.getTimeLimit(domain);
         // Convert minutes to milliseconds only when timeLimit exists
         const timeLimitMs = timeLimit ? timeLimit * 60 * 1000 : null;
@@ -64,12 +64,11 @@ export class TimeTracker {
         if (timeLimitMs) {
             this.startTimeLimitCheck(domain);
         }
-    }
-    
+    }    
 
-    async stopTimer(domain) {
+    async stopTimer(domain){
         const timer = this.activeTimers.get(domain);
-        if (timer) {
+        if(timer){
             const endTime = Date.now();
             this.activeTimers.delete(domain);
             await this.processVisit(domain, timer.startTime, endTime);
@@ -78,12 +77,12 @@ export class TimeTracker {
 
     startTimeLimitCheck(domain) {      
         const timer = this.activeTimers.get(domain);
-        if (!timer) return;
+        if(!timer) return;
         console.log(`Starting time limit check for ${domain}`);
 
         const checkInterval = setInterval(() => {
             const currentTimer = this.activeTimers.get(domain);
-            
+
             if (!currentTimer) {
                 clearInterval(checkInterval);
                 return;
@@ -108,12 +107,12 @@ export class TimeTracker {
         console.log(`notifyTimeLimitExceeded created for ${domain}`)
     }
 
-    async processVisit(domain, startTime, endTime) {
+    async processVisit(domain, startTime, endTime){
         await this.initialized;
         const category = this.getCategory(domain);
         const duration = endTime - startTime;
         
-
+        
         const visitData = {
             domain,
             category,
@@ -121,15 +120,15 @@ export class TimeTracker {
             endTime,
             duration,
             formattedDuration: formatTime(duration),
-            date: new Date(startTime).toISOString().split('T')[0]}
-
+            date: new Date(startTime).toISOString().split('T')[0]};
+        
         await StorageManager.saveTimeEntry(visitData);return visitData;
     }
 
     calculateProductivityScore(timeData) {
         const categoryWeights = {
-            'work': 1,
-            'social': -0.5,
+            "work": 1,
+            "social": -0.5,
             'entertainment': -0.3,
             'other': 0
         };
@@ -137,7 +136,7 @@ export class TimeTracker {
         let totalTime = 0;
         let weightedTime = 0;
 
-        Object.entries(timeData).forEach(([category, time]) => {
+        Object.entries(timeData).forEach(([category, time]) =>{
             totalTime += time;
             weightedTime += time * (categoryWeights[category] || 0);
         });

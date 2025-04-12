@@ -1,13 +1,66 @@
-export class StorageManager {
-    static async initializeDefaultCategories() {
-        const data = await chrome.storage.local.get('categories');
-        if (!data.categories) {
-            const defaultCategories = {
-                'Work': [],
-                'Leisure': [],
-                'Others': [],
-            };
-            await chrome.storage.local.set({ categories: defaultCategories });
+class StorageManager {
+    async initializeDefaultCategories() {
+        try {
+            const data = await chrome.storage.local.get('categories');
+            if (!data.categories) {
+                const defaultCategories = {
+                    'social': ['facebook.com', 'twitter.com', 'instagram.com'],
+                    'work': ['github.com', 'gitlab.com', 'docs.google.com'],
+                    'entertainment': ['youtube.com', 'netflix.com', 'spotify.com'],
+                    'other':[]
+                };
+                await chrome.storage.local.set({ categories: defaultCategories });
+            }
+        } catch (error) {
+            console.error('Error initializing default categories:', error);
+        }
+    }
+
+    async saveTimeEntry(visitData) {
+        try {
+            const data = await chrome.storage.local.get(['dailyData']);
+            const dailyData = data.dailyData || {};
+    
+            if (!dailyData[visitData.date]) {
+                dailyData[visitData.date] = {
+                    categories: {},
+                    domains: {},
+                    totalTime: 0
+                };
+            }
+    
+            const daily = dailyData[visitData.date];
+    
+            daily.totalTime += visitData.duration;
+            daily.categories[visitData.category] = (daily.categories[visitData.category] || 0) + visitData.duration;
+            const previousDuration = daily.domains[visitData.domain] || 0;
+            daily.domains[visitData.domain] = previousDuration + visitData.duration;
+    
+            await chrome.storage.local.set({ dailyData });
+        } catch (error) {
+            console.error('Error saving time entry:', error);
+        }
+    }
+
+    async getTimeLimit(domain) {
+        try {
+            const data = await chrome.storage.local.get('timeLimits');
+            const timeLimits = data.timeLimits || {};
+            return timeLimits[domain] || null;
+        } catch (error) {
+            console.error('Error getting time limit:', error);
+            return null;
+        }
+    }
+
+    async saveTimeLimit(domain, timeLimitMinutes) {
+        try {
+            const data = await chrome.storage.local.get('timeLimits');
+            const timeLimits = data.timeLimits || {};
+            timeLimits[domain] = timeLimitMinutes;
+            await chrome.storage.local.set({ timeLimits });
+        } catch (error) {
+            console.error('Error saving time limit:', error);
         }
     }
 
@@ -256,3 +309,5 @@ export class StorageManager {
         return { timeData, dailyData };
     }
 }
+
+export {StorageManager}

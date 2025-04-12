@@ -23,15 +23,14 @@
         }
     },
     "background": {
-        "service_worker": "js/background.js",
-        "type": "module"
+        "service_worker": "js/background.js", "type": "module",
+        "type": "module", "type": "module"
     },
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["js/content.js"],
-            "css": ["css/content.css"],
-            "run_at": "document_start"
+            "js": ["js/content.js"],        
+           "run_at": "document_start"
         }
     ],
     "icons": {
@@ -39,10 +38,12 @@
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     },
-    "options_ui": {
-        "page": "dashboard.html",
-        "open_in_tab": true
-    },
+    "background": {
+        "service_worker": "js/background.js",
+        "type": "module",
+        "scripts": ["js/storage.js", "js/tracker.js"]
+    },    
+
     "web_accessible_resources": [
         {
             "resources": ["images/*", "css/*", "js/*", "dashboard.html"],

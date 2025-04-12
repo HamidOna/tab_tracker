@@ -1,38 +1,68 @@
 /* Base styles */
 /* Base styles */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     width: 350px; /* Adjusted to match the popup width in your images but slightly wider */
     margin: 0;
-    padding: 15px;
-    background: #f5f6fa;
-    color: #2c3e50;
+    padding: 10px;
+    background: #f0f0f0;
+    color: #333;
 }
 
 
 /* Adjust responsive styles */
-@media (max-width: 500px) {
+@media (max-width: 400px) {
     body {
-        width: 400px; /* Adjust for smaller screens */
+        width: 100%; /* Full width on smaller screens */
+        padding: 10px; /* Adjust padding as needed */
+    }
+
+    .button-section {
+        flex-direction: column; /* Stack buttons vertically */
+    }
+
+    .button-section button {
+        flex: 1 1 100%; /* Full width buttons */
     }
 }
 
 
 /* Header styles */
-.popup-container h1 {
-    font-size: 18px;
-    margin: 0 0 15px 0;
-    color: #2c3e50;
+.header {
+    position: relative; /* For positioning the toggle button */
+    margin-bottom: 20px; /* More space below the header */
+}
+
+.header h1 {
+    font-size: 22px;
+    margin: 0; /* Remove default margin */
+    color: #333;
     text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
 
 /* Stat section */
 .stat-section {
     background: #fff;
     border-radius: 8px;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+.stat-section .time-element {
+    font-weight: bold;
+    color: #e74c3c; /* Red for time elements */
+}
+
+.stat-section #totalTime {
+    color: #3498db; /* Blue for total time */
+}
+
+.stat-section #timeSpent {
+    color: #2ecc71; /* Green for time spent */
 }
 
 .stat-section h2 {
@@ -41,7 +71,7 @@ body {
     color: #2c3e50;
 }
 
-.stat-section p {
+.stat-section div {
     margin: 0;
     font-size: 14px;
     color: #2c3e50;
@@ -51,7 +81,7 @@ body {
 #productivityScore {
     font-size: 24px;
     font-weight: bold;
-    text-align: center;
+    text-align: right;
     margin: 10px 0;
 }
 
@@ -69,8 +99,9 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: 20px;
 }
+
 
 .button-section button {
     flex: 1 1 calc(50% - 10px);
@@ -81,6 +112,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: bold;
     text-align: center;
     transition: background-color 0.2s;
 }
@@ -98,7 +130,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .category-tag {
@@ -107,6 +139,7 @@ body {
     padding: 4px 12px;
     border-radius: 15px;
     font-size: 12px;
+    font-weight: bold;
     cursor: pointer;
     border: none;
     transition: background-color 0.2s;
@@ -124,13 +157,16 @@ body {
 /* Dropdown styles */
 select {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border-radius: 4px;
-    border: 1px solid #ddd;
+    border: 2px solid #3498db; /* Add a blue border */
     background: #fff;
     font-size: 14px;
-    color: #2c3e50;
-    margin-bottom: 10px;
+    color: #333;
+    margin-bottom: 15px; /* Add more margin below */
+    -webkit-appearance: none; /* Remove default styling */
+    -moz-appearance: none;
+    appearance: none;
 }
 
 /* Error message */
@@ -139,13 +175,13 @@ select {
     background: #fee;
     padding: 10px;
     border-radius: 4px;
-    margin-top: 10px;
+    margin-top: 15px;
     display: none;
-}
+}   
 
 /* Modal styles */
 .modal {
-    display: none;
+    display: none;   
     position: fixed;
     top: 0;
     left: 0;
@@ -155,25 +191,32 @@ select {
     z-index: 1000;
 }
 
+/* Styles for the modal content */
 .modal-content {
-    background: #fff;
-    border-radius: 8px;
+    background-color: #2c3e50; /* Dark background */
+    border-radius: 10px; /* Rounded corners */
     padding: 20px;
-    max-width: 300px;
-    margin: 20% auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    position: relative;
-}
+    width: 90%;
+    max-width: 400px; /* Adjust as needed */
+    margin: 15% auto; /* Center the modal */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    position: relative; /* For positioning the close button */
+    color: white;
+    }
 
+/* Styles for the modal title */
 .modal-content h2 {
     margin-top: 0;
     font-size: 18px;
+    margin-bottom: 20px;
+    color: white;
 }
 
+/* Styles for input fields within the modal */
 .modal-content input[type="text"],
 .modal-content input[type="number"] {
     width: 100%;
-    padding: 8px;
+    padding: 10px; /* Increased padding */
     border-radius: 4px;
     border: 1px solid #ddd;
     margin-bottom: 10px;
@@ -181,45 +224,22 @@ select {
 }
 
 .modal-content button {
-    background: #3498db;
-    color: white;
+    background-color: #3498db; /* Button background */
+    color: white; /* Button text color */
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 20px; /* Increased padding */
+    border-radius: 5px; /* Rounded corners */
     cursor: pointer;
+    margin-top: 10px;
     font-size: 14px;
     transition: background-color 0.2s;
 }
 
-.modal-content button:hover {
-    background: #2980b9;
-}
-
+/* Styles for the close button */
 .modal-content .close {
-    position: absolute;
+    position: absolute; /* Positioned absolutely within the modal */
     top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #7f8c8d;
-}
-
-/* Responsive adjustments */
-@media (max-width: 400px) {
-    body {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .button-section {
-        flex-direction: column;
-    }
-
-    .button-section button {
-        flex: 1 1 100%;
-    }
+    right: 15px; /* Adjusted for better spacing */
 }
 
 /* Real-Time Timer Styles */
@@ -227,11 +247,12 @@ select {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
-    margin: 15px 0;
+    margin: 20px 0;
+    color: #2ecc71;
 }
 
 /* Extension Toggle Button */
-.toggle-button {
+.extension-toggle {
     position: absolute;
     top: 10px;
     right: 15px;
@@ -243,21 +264,17 @@ select {
     cursor: pointer;
     font-size: 12px;
     transition: background-color 0.2s;
+    font-weight: bold;
 }
 
-.toggle-button:hover {
+.extension-toggle:hover {
     background: #c0392b;
 }
 
-.toggle-button.active {
+.extension-toggle.active {
     background: #2ecc71;
 }
 
-.toggle-button.active:hover {
+.extension-toggle.active:hover {
     background: #27ae60;
-}
-
-/* Adjust the header to position relative */
-.header {
-    position: relative;
 }

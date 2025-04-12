@@ -30,6 +30,39 @@ function updateProductivityScore(categories) {
     }
 }
 
+function createChart(ctx, type, labels, datasets, options = {}) {
+    if (ctx) {
+      new Chart(ctx, {
+        type: type,
+        data: {
+          labels: labels,
+          datasets: datasets,
+        },
+        options: {
+          responsive: true,
+          ...options,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  if (type === 'line') {
+                    return formatTime(context.parsed.y);
+                  } else if(type === 'doughnut') {
+                    const label = context.label || '';
+                    const value = context.parsed || 0;
+                    return `${label}: ${TimeTracker.formatTime(value)}`;
+                  }
+                },
+              },
+            },
+            ...options.plugins
+          },
+        },
+      });
+    } else {
+      console.error(`Canvas element for chart not found`);
+    }
+  }
 function calculateProductivityScore(categories) {
     const weights = {
         'work': 1,
@@ -74,28 +107,32 @@ function updateTopSites(domains) {
 }
 
 function updateCategoryBreakdown(categories) {
-    const categoryList = document.getElementById('categoryList');
-    if (categoryList) {
-        const totalTime = Object.values(categories || {}).reduce((a, b) => a + b, 0);
-
-        const categoriesHTML = Object.entries(categories || {})
-            .sort(([, a], [, b]) => b - a)
-            .map(([category, time]) => {
-                const percentage = totalTime ? ((time / totalTime) * 100).toFixed(1) : 0;
-                return `
-                    <li class="category-item">
-                        <div>
-                            <strong>${category}</strong>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${percentage}%"></div>
+    try {
+        const categoryList = document.getElementById('categoryList');
+        if (categoryList) {
+            const totalTime = Object.values(categories || {}).reduce((a, b) => a + b, 0);
+    
+            const categoriesHTML = Object.entries(categories || {})
+                .sort(([, a], [, b]) => b - a)
+                .map(([category, time]) => {
+                    const percentage = totalTime ? ((time / totalTime) * 100).toFixed(1) : 0;
+                    return `
+                        <li class="category-item">
+                            <div>
+                                <strong>${category}</strong>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${percentage}%"></div>
+                                </div>
                             </div>
-                        </div>
-                        <span>${TimeTracker.formatTime(time)}</span>
-                    </li>
-                `;
-            }).join('');
-
-        categoryList.innerHTML = categoriesHTML;    
+                            <span>${TimeTracker.formatTime(time)}</span>
+                        </li>
+                    `;
+                }).join('');
+    
+            categoryList.innerHTML = categoriesHTML;    
+        }
+    } catch (error) {
+        console.error('Error updating category breakdown:', error);
     }
 }
 
@@ -124,47 +161,28 @@ async function updateDailyActivityChart(dailyData) {
     const dataPoints = dates.map(date => dailyData?.[date]?.totalTime || 0);
 
     const ctx = document.getElementById('dailyActivityChart')?.getContext('2d');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Time Spent',
-                    data: dataPoints,
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function (value) {
-                                return TimeTracker.formatTime(value);
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: { 
-                            label: function (context) {
-                                return formatTime(context.parsed.y);
-                            }
-                        }
+    const datasets = [{
+      label: 'Total Time Spent',
+      data: dataPoints,
+      backgroundColor: 'rgba(52, 152, 219, 0.2)',
+      borderColor: 'rgba(52, 152, 219, 1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4
+    }];
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function (value) {
+                        return TimeTracker.formatTime(value);
                     }
                 }
             }
-        });
-    } else {
-        console.error('Canvas element for daily activity chart not found');
+        }
     }
+    createChart(ctx, 'line', labels, datasets, options)
 }
 
 function updateCategoryChart(categories) {
@@ -174,34 +192,13 @@ function updateCategoryChart(categories) {
         const categoryTimes = Object.values(categories || {});
 
         const colors = getChartColors(categoryNames.length);
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: categoryNames,
-                datasets: [{
-                    data: categoryTimes,
-                    backgroundColor: colors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                return `${label}: ${TimeTracker.formatTime(value)}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    } else {
-        console.error('Canvas element for category chart not found');
+        const datasets = [{
+          data: categoryTimes,
+          backgroundColor: colors,
+          borderWidth: 1,
+        }];
+    
+        createChart(ctx, 'doughnut', categoryNames, datasets);
     }
 }
 

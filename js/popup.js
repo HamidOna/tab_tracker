@@ -253,11 +253,20 @@ function setupEventListeners() {
     setupButtonListener('setTimeLimit', showTimeLimitModal);
     setupButtonListener('extensionToggle', toggleExtensionState);
 
-    window.onclick = (event) => {
-        if (event.target.classList.contains('modal')) {
+    window.addEventListener('click', (event) => {
+        const modal = event.target.closest('.modal');
+        const modalContent = event.target.closest('.modal-content');
+        const closeButton = event.target.closest('.close');
+        
+        if(closeButton){
+            hideModals()
+            return
+        }
+        
+        if (modal && !modalContent) {
             hideModals();
         }
-    };
+    });
 }
 
 function setupButtonListener(id, handler) {
@@ -358,10 +367,6 @@ function formatTimeWithSeconds(milliseconds) {
 }
 
 
-function padZero(num) {
-    return num.toString().padStart(2, '0');
-}
-
 function getTodayDate() {
     return new Date().toISOString().split('T')[0];
 }
@@ -397,8 +402,8 @@ async function showTimeLimitModal() {
         const input = document.getElementById('timeLimitInput');
 
         saveBtn.onclick = async () => {
-            const timeLimitMinutes = parseInt(input.value.trim(), 10);
-            if (!isNaN(timeLimitMinutes) && timeLimitMinutes > 0) {
+            const categoryName = input.value.trim();
+            if (categoryName) {
                 const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
                 const domain = new URL(tabs[0].url).hostname;
                 // Pass minutes directly to setTimeLimit
@@ -438,16 +443,14 @@ function showCategoryModal() {
         const input = document.getElementById('newCategoryInput');
 
         saveBtn.onclick = async () => {
-            const timeLimitMinutes = parseInt(input.value.trim(), 10);
-            if (!isNaN(timeLimitMinutes) && timeLimitMinutes > 0) {
-                const timeLimitMs = timeLimitMinutes * 60 * 1000; // Correct conversion
-                const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-                const domain = new URL(tabs[0].url).hostname;
-                await StorageManager.setTimeLimit(domain, timeLimitMs);
+           const newCategoryName = input.value.trim();
+            if (newCategoryName) {
+                await StorageManager.addCategory(newCategoryName);
                 await updatePopupStats();
                 hideModals();
             } else {
-                alert('Please enter a valid time limit in minutes.');
+                alert('Please enter a valid category name.');
+                return;
             }
         };
         

@@ -13,9 +13,6 @@ let isSessionSaving = false;  // Lock flag
 let lastSaveTimestamp = 0;    // Track last save time
 const MIN_SAVE_INTERVAL = 2000; // Minimum 2 seconds between saves
 
-
-// Initialize the extension
-(async function initialize() {
     const data = await chrome.storage.local.get(['currentSession', 'timeLimitNotified']);
     currentSession = data.currentSession || { domain: null, startTime: null };
     timeLimitNotified = data.timeLimitNotified || {};
@@ -103,6 +100,10 @@ function setupEventListeners() {
         }else if(request.action === "reloadDashboard"){
             console.log("Reloading dashboard");
             chrome.runtime.sendMessage({ action: "reloadDashboard" });
+            return true;
+        }else if(request.type === "pageChange"){
+            console.log("Page change in content:", request);
+            await handleTabChange({url: `https://${request.domain}`});
             return true;
         }
         return true;
@@ -213,26 +214,6 @@ async function saveCurrentSession() {
             console.error('Error saving session:', error);
         }
     }
-}
-
-async function continueDomainSession(domain) {
-    const domainTimeSoFar = await getDomainTimeSoFar(domain);
-    const now = Date.now();
-    
-    const session = {
-        domain: domain,
-        startTime: now - domainTimeSoFar, // Back-calculate start time to maintain continuity
-        lastSaveTime: now
-    };
-    
-    console.log('Continuing domain session:', {
-        domain,
-        domainTimeSoFar,
-        calculatedStartTime: session.startTime,
-        now
-    });
-    
-    await updateCurrentSession(session);
 }
 
 async function getDomainTimeSoFar(domain) {

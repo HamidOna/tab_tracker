@@ -1,5 +1,6 @@
 /* General Styles */
 body {
+    display: flex;
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 10px;
@@ -7,37 +8,24 @@ body {
     color: #333;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 100%; /* Adjust for smaller screens */
-    min-width: 300px;
-}
 
 /* Header Styles */
 .header {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-.header {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    align-items: flex-start;
 }
 
 .header h1 {
     margin: 0;
     font-size: 2em;
     color: #333;
+    
 }
 
 .header p {
@@ -53,14 +41,7 @@ body {
     margin-bottom: 15px;
 }
 
-.stat-card {
-    flex: 1 1 150px; /* Responsive card sizing */
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
+
 
 .stat-card h2 {
     margin-bottom: 10px;
@@ -68,13 +49,14 @@ body {
     color: #333;
 }
 
-.stat-card {
+.stat-card  {
+    flex: 1 1 150px; /* Responsive card sizing */
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
-}
+} 
 
 .stat-card h2 {
     margin-bottom: 15px;
@@ -155,7 +137,6 @@ body {
     margin: auto;
     height: 400px;
 }
-
 .chart-container canvas {
     max-width: 100%;
     height: auto;
