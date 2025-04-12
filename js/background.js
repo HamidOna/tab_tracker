@@ -13,6 +13,8 @@ let isSessionSaving = false;  // Lock flag
 let lastSaveTimestamp = 0;    // Track last save time
 const MIN_SAVE_INTERVAL = 2000; // Minimum 2 seconds between saves
 
+
+    (async () => {
     const data = await chrome.storage.local.get(['currentSession', 'timeLimitNotified']);
     currentSession = data.currentSession || { domain: null, startTime: null };
     timeLimitNotified = data.timeLimitNotified || {};
